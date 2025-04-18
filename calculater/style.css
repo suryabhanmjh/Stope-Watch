@@ -1,89 +1,121 @@
+/* Base Styles */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+:root {
+    --bg-color: #22252D;
+    --display-bg: #292D36;
+    --button-bg: #272B33;
+    --text: #FFFFFF;
+    --operator: #FF9500;
+    --ac-color: #FF3B30;
+    --equals: #2ECC71;
 }
 
 body {
-    background: linear-gradient(to right, #00AAFF, #00FF6C);
-    display: flex;
-    justify-content: center;
-    align-items: center;
     min-height: 100vh;
-}
-
-.calculator {
-    background-color: #333;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-    width: 350px;
+    place-items: center;
+    background: var(--bg-color);
 }
 
-.display {
-    grid-column: span 4;
-    background-color: #222;
+/* Calculator Layout */
+.calculator {
+    background: var(--display-bg);
+    border-radius: 20px;
     padding: 20px;
-    border-radius: 5px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    width: min(95vw, 350px);
+}
+
+/* Display */
+.display {
+    background: var(--display-bg);
+    padding: 30px 20px;
     text-align: right;
-    margin-bottom: 10px;
+    border-radius: 10px;
+    margin-bottom: 20px;
 }
 
 .previous-operand {
-    color: rgba(255, 255, 255, 0.75);
-    font-size: 1.2rem;
-    min-height: 24px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 20px;
+    height: 24px;
 }
 
 .current-operand {
-    color: white;
-    font-size: 2.5rem;
-    word-wrap: break-word;
+    color: var(--text);
+    font-size: 40px;
+    font-weight: 500;
+    line-height: 1.2;
     word-break: break-all;
 }
 
+/* Button Grid */
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+/* Button Styles */
 button {
-    padding: 20px;
     border: none;
-    border-radius: 5px;
-    font-size: 1.5rem;
+    border-radius: 10px;
+    padding: 20px;
+    font-size: 24px;
+    font-weight: 500;
     cursor: pointer;
-    transition: 0.3s;
+    color: var(--text);
+    background: var(--button-bg);
+    transition: transform 0.1s, opacity 0.1s;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+button:active {
+    transform: scale(0.95);
 }
 
 .number {
-    background-color: #555;
-    color: white;
+    background: var(--button-bg);
 }
 
 .operator {
-    background-color: #FF9500;
-    color: white;
+    background: var(--operator);
+    font-weight: 600;
 }
 
 .equals {
-    background-color: #2ECC71;
-    color: white;
+    background: var(--equals);
 }
 
-.ac, .del {
-    background-color: #FF3B30;
-    color: white;
+.ac {
+    background: var(--ac-color);
 }
 
 .span-two {
     grid-column: span 2;
 }
 
-button:hover {
-    opacity: 0.9;
-    transform: scale(0.98);
-}
+/* Media Query for smaller screens */
+@media (max-width: 380px) {
+    .calculator {
+        padding: 15px;
+    }
 
-button:active {
-    transform: scale(0.95);
+    button {
+        padding: 15px;
+        font-size: 20px;
+    }
+
+    .current-operand {
+        font-size: 32px;
+    }
 }
