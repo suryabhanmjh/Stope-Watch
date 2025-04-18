@@ -1,113 +1,120 @@
-class Calculator {
-    constructor() {
-        this.previousOperand = '';
-        this.currentOperand = '0';
-        this.operation = undefined;
-        this.initializeElements();
-        this.addEventListeners();
-    }
+let currentInput = '0';
+let previousInput = '';
+let operation = null;
 
-    initializeElements() {
-        this.previousOperandElement = document.querySelector('.previous-operand');
-        this.currentOperandElement = document.querySelector('.current-operand');
-        this.numberButtons = document.querySelectorAll('.number');
-        this.operatorButtons = document.querySelectorAll('.operator');
-        this.equalsButton = document.querySelector('.equals');
-        this.acButton = document.querySelector('.ac');
-        this.delButton = document.querySelector('.del');
-    }
+// Get DOM elements
+const currentDisplay = document.querySelector('.current-operand');
+const previousDisplay = document.querySelector('.previous-operand');
 
-    addEventListeners() {
-        this.numberButtons.forEach(button => {
-            button.addEventListener('click', () => this.appendNumber(button.textContent));
-        });
+// Add event listeners to all buttons
+document.querySelector('.calculator').addEventListener('click', (e) => {
+    if (e.target.matches('button')) {
+        const button = e.target;
+        const buttonValue = button.textContent;
 
-        this.operatorButtons.forEach(button => {
-            button.addEventListener('click', () => this.chooseOperation(button.textContent));
-        });
-
-        this.equalsButton.addEventListener('click', () => this.calculate());
-        this.acButton.addEventListener('click', () => this.clear());
-        this.delButton.addEventListener('click', () => this.delete());
-    }
-
-    appendNumber(number) {
-        if (number === '.' && this.currentOperand.includes('.')) return;
-        if (this.currentOperand === '0' && number !== '.') {
-            this.currentOperand = number;
-        } else {
-            this.currentOperand += number;
+        // Handle different button types
+        if (button.classList.contains('number')) {
+            handleNumber(buttonValue);
+        } else if (button.classList.contains('operator')) {
+            handleOperator(buttonValue);
+        } else if (button.classList.contains('equals')) {
+            handleEquals();
+        } else if (button.classList.contains('ac')) {
+            handleClear();
+        } else if (button.classList.contains('del')) {
+            handleDelete();
         }
-        this.updateDisplay();
+    }
+});
+
+// Handle number inputs
+function handleNumber(number) {
+    if (number === '.' && currentInput.includes('.')) return;
+    if (currentInput === '0' && number !== '.') {
+        currentInput = number;
+    } else {
+        currentInput += number;
+    }
+    updateDisplay();
+}
+
+// Handle operator buttons
+function handleOperator(op) {
+    if (currentInput === '') return;
+    if (previousInput !== '') {
+        calculate();
+    }
+    operation = op;
+    previousInput = currentInput;
+    currentInput = '';
+    updateDisplay();
+}
+
+// Handle equals button
+function handleEquals() {
+    calculate();
+    operation = null;
+}
+
+// Handle clear button
+function handleClear() {
+    currentInput = '0';
+    previousInput = '';
+    operation = null;
+    updateDisplay();
+}
+
+// Handle delete button
+function handleDelete() {
+    if (currentInput.length === 1) {
+        currentInput = '0';
+    } else {
+        currentInput = currentInput.slice(0, -1);
+    }
+    updateDisplay();
+}
+
+// Calculate result
+function calculate() {
+    if (!previousInput || !currentInput) return;
+    
+    const prev = parseFloat(previousInput);
+    const current = parseFloat(currentInput);
+    let result;
+
+    switch (operation) {
+        case '+':
+            result = prev + current;
+            break;
+        case '-':
+            result = prev - current;
+            break;
+        case '×':
+            result = prev * current;
+            break;
+        case '÷':
+            result = prev / current;
+            break;
+        default:
+            return;
     }
 
-    chooseOperation(operation) {
-        if (this.currentOperand === '') return;
-        if (this.previousOperand !== '') {
-            this.calculate();
-        }
-        this.operation = operation;
-        this.previousOperand = this.currentOperand;
-        this.currentOperand = '';
-        this.updateDisplay();
-    }
+    currentInput = result.toString();
+    previousInput = '';
+    updateDisplay();
+}
 
-    calculate() {
-        let computation;
-        const prev = parseFloat(this.previousOperand);
-        const current = parseFloat(this.currentOperand);
-        if (isNaN(prev) || isNaN(current)) return;
-
-        switch (this.operation) {
-            case '+':
-                computation = prev + current;
-                break;
-            case '-':
-                computation = prev - current;
-                break;
-            case '×':
-                computation = prev * current;
-                break;
-            case '÷':
-                computation = prev / current;
-                break;
-            default:
-                return;
-        }
-
-        this.currentOperand = computation.toString();
-        this.operation = undefined;
-        this.previousOperand = '';
-        this.updateDisplay();
-    }
-
-    clear() {
-        this.previousOperand = '';
-        this.currentOperand = '0';
-        this.operation = undefined;
-        this.updateDisplay();
-    }
-
-    delete() {
-        if (this.currentOperand.length === 1) {
-            this.currentOperand = '0';
-        } else {
-            this.currentOperand = this.currentOperand.slice(0, -1);
-        }
-        this.updateDisplay();
-    }
-
-    updateDisplay() {
-        this.currentOperandElement.textContent = this.currentOperand;
-        if (this.operation != null) {
-            this.previousOperandElement.textContent = `${this.previousOperand} ${this.operation}`;
-        } else {
-            this.previousOperandElement.textContent = '';
-        }
+// Update display
+function updateDisplay() {
+    currentDisplay.textContent = currentInput;
+    if (operation) {
+        previousDisplay.textContent = `${previousInput} ${operation}`;
+    } else {
+        previousDisplay.textContent = '';
     }
 }
 
 // Initialize calculator when the page loads
 document.addEventListener('DOMContentLoaded', () => {
-    new Calculator();
+    handleClear();
 });
