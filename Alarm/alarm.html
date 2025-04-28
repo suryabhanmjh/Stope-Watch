@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="time" id="alarmTime" placeholder="Set Alarm Time">
+    <button onclick="setAlarm()" id="setAlarm">Set Alarm</button>
+    <h1 id="show">Show</h1>
+
+    <script>
+        let alarmTime = document.getElementById("alarmTime");
+        let setAlarmButton = document.getElementById("setAlarm");
+        let alarmMessage = document.querySelector("h1");
+        let alarmTimeout = null;
+    </script>
+</body>
+</html>
