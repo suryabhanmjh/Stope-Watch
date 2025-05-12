@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Bookings</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- redirect if not logged in: -->
+    <script>
+  const user = JSON.parse(localStorage.getItem("currentUser"));
+  if (!user) {
+    alert("Please login first.");
+    window.location.href = "login.html";
+  }
+</script>
+
+    <nav class="navbar">
+  <div class="nav-left">
+    🎬 <strong>MovieApp</strong>
+  </div>
+  <div class="nav-right">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="bookings.html">My Bookings</a>
+    <a href="index.html" onclick="logout()">Logout</a>
+  </div>
+</nav>
+
+<!-- this common logout function: -->
+<script>
+  function logout() {
+    localStorage.removeItem("currentUser");
+    window.location.href = "login.html";
+  }
+</script>
+
+
+  <h2>🎟️ My Bookings</h2>
+  <div id="bookingList"></div>
+
+  <script>
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    let bookings = JSON.parse(localStorage.getItem("bookings")) || [];
+
+    // Filter only bookings for current user
+    const userBookings = bookings.filter(b => b.email === currentUser.email);
+
+    const listDiv = document.getElementById("bookingList");
+
+    if (userBookings.length === 0) {
+      listDiv.innerHTML = "<p>No bookings yet.</p>";
+    } else {
+      const table = document.createElement("table");
+      table.innerHTML = `
+        <tr>
+          <th>Movie</th>
+          <th>Tickets</th>
+          <th>Total (₹)</th>
+          <th>Update</th>
+          <th>Delete</th>
+        </tr>
+      `;
+
+      userBookings.forEach((booking, index) => {
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+          <td>${booking.movie}</td>
+          <td>
+            <input type="number" value="${booking.qty}" min="1" id="qty-${index}">
+          </td>
+          <td id="total-${index}">₹${booking.total}</td>
+          <td>
+            <button onclick="updateBooking(${index})">Update</button>
+          </td>
+          <td>
+            <button onclick="deleteBooking(${index})">Delete</button>
+          </td>
+        `;
+
+        table.appendChild(row);
+      });
+
+      listDiv.appendChild(table);
+    }
+
+    function updateBooking(index) {
+      const newQty = parseInt(document.getElementById(`qty-${index}`).value);
+      if (newQty < 1) {
+        alert("Quantity must be at least 1");
+        return;
+      }
+
+      const movie = bookings.filter(b => b.email === currentUser.email)[index].movie;
+      const movieList = [
+        { title: "Avengers: Endgame", price: 250 },
+        { title: "The Batman", price: 200 },
+        { title: "Spider-Man: No Way Home", price: 180 }
+      ];
+      const price = movieList.find(m => m.title === movie).price;
+      const newTotal = newQty * price;
+
+      // Update in main bookings array
+      let bookingIndex = bookings.findIndex(b => b.email === currentUser.email && b.movie === movie);
+      bookings[bookingIndex].qty = newQty;
+      bookings[bookingIndex].total = newTotal;
+
+      localStorage.setItem("bookings", JSON.stringify(bookings));
+      alert("Booking updated!");
+      location.reload();
+    }
+
+    function deleteBooking(index) {
+      const filtered = bookings.filter(b => b.email === currentUser.email);
+      const toDelete = filtered[index];
+
+      bookings = bookings.filter(b => !(b.email === toDelete.email && b.movie === toDelete.movie));
+      localStorage.setItem("bookings", JSON.stringify(bookings));
+      alert("Booking deleted.");
+      location.reload();
+    }
+  </script>
+</body>
+</html>
