@@ -133,3 +133,45 @@ button {
 button:hover {
   background-color: #218838;
 }
+
+
+/* seat selection */
+
+.seat-container {
+  display: grid;
+  grid-template-columns: repeat(10, 40px);
+  gap: 10px;
+  max-width: 500px;
+  margin: auto;
+  padding: 20px;
+}
+
+.seat {
+  width: 40px;
+  height: 40px;
+  background-color: #ccc;
+  border-radius: 5px;
+  text-align: center;
+  line-height: 40px;
+  cursor: pointer;
+}
+
+.seat.selected {
+  background-color: green;
+  color: white;
+}
+
+.seat.booked {
+  background-color: red;
+  cursor: not-allowed;
+}
+
+.screen {
+  width: 80%;
+  background: #333;
+  color: white;
+  padding: 10px;
+  margin: 20px auto;
+  text-align: center;
+  border-radius: 5px;
+}

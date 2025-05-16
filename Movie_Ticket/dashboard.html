@@ -81,25 +81,22 @@
     });
 
     function bookTicket(movieId) {
-      const movie = movies.find(m => m.id === movieId);
-      const qty = parseInt(document.getElementById(`qty-${movieId}`).value);
-      if (qty < 1) return alert("Please select at least 1 ticket.");
+  const movie = movies.find(m => m.id === movieId);
+  const qty = parseInt(document.getElementById(`qty-${movieId}`).value);
+  if (qty < 1) return alert("Please select at least 1 ticket.");
 
-      const total = qty * movie.price;
+  // Store selected movie and ticket quantity
+  localStorage.setItem("selectedMovie", JSON.stringify({
+    id: movie.id,
+    title: movie.title,
+    price: movie.price,
+    qty: qty
+  }));
 
-      const booking = {
-        movie: movie.title,
-        qty,
-        total,
-        email: JSON.parse(localStorage.getItem("currentUser")).email
-      };
+  // Go to seat selection page
+  window.location.href = "seat-selection.html";
+}
 
-      let bookings = JSON.parse(localStorage.getItem("bookings")) || [];
-      bookings.push(booking);
-      localStorage.setItem("bookings", JSON.stringify(bookings));
-
-      alert(`🎟️ ${qty} ticket(s) booked for "${movie.title}". Total: ₹${total}`);
-    }
   </script>
 </body>
 </html>
