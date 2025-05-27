@@ -26,10 +26,6 @@ A sleek and responsive stopwatch built using **HTML, CSS, and JavaScript**. This
 
 > Clean and minimalist interface with glowing red highlight
 
-## 🎥 Demo
-
-🎬 *Watch the working demo:*  
-[Click here to view the demo video](./vid.mp4) <!-- Replace # with your video link (YouTube/GitHub video upload) -->
 
 ## 🔗 Live Demo
-[View the Project on Vercel](https://to-do-list-suryabhan-singhs-projects.vercel.app/)
+[View the Project on Vercel](https://stope-watch-qqhz.vercel.app/)
